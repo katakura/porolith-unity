@@ -323,6 +323,11 @@ MonoBehaviour:
   - {fileID: 4070348015380625256, guid: b5b2ff3d1de15ce419e7c97cf4f4ec02, type: 3}
   - {fileID: 8191629628246232734, guid: ce6e77ed874db41448ab6afbef5f4194, type: 3}
   - {fileID: 7450132011977925592, guid: 44353b75f6417b545b2458e5db68718d, type: 3}
+  - {fileID: 7179076868095483294, guid: 11fc4e435b7c04e4cbd4d856068a59ae, type: 3}
+  - {fileID: 3818959634265377596, guid: fda1f1e00f55df543bda83cad16f5e00, type: 3}
+  - {fileID: 1607443398808799364, guid: 227a230e8438df0478edc2c02400da92, type: 3}
+  - {fileID: 4827138388978744457, guid: a27eade0a9a3d4c4fb6407933a31f427, type: 3}
+  - {fileID: 2089433502619405125, guid: 4e4649e5a576fc7409242a212bf61d48, type: 3}
 --- !u!4 &1883494225
 Transform:
   m_ObjectHideFlags: 0
@@ -331,7 +336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883494223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 19, z: 0}
+  m_LocalPosition: {x: 7, y: 21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
