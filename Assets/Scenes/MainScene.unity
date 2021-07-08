@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 612890978}
   - component: {fileID: 612890977}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 1365776512}
   - component: {fileID: 1365776511}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
