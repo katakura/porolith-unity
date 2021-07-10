@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 61182386}
   - component: {fileID: 61182385}
   m_Layer: 0
-  m_Name: Square (2)
+  m_Name: WallBotom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 1842687913}
   - component: {fileID: 1842687912}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: WallRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 1959629722}
   - component: {fileID: 1959629721}
   m_Layer: 0
-  m_Name: Square
+  m_Name: WallLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

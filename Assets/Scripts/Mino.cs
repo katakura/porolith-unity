@@ -125,6 +125,79 @@ public class Mino : MonoBehaviour
         }
     }
 
+    void DrawLine(GameObject obj)
+    {
+        // 一旦LineRednererのある子オブジェクトを全て削除
+        var childObjs = obj.GetComponentsInChildren<LineRenderer>();
+        foreach (var item in childObjs)
+        {
+            Destroy(item.gameObject);
+        }
+
+        // ブロック(単品の座標)
+        int roundX = Mathf.RoundToInt(obj.transform.position.x);
+        int roundY = Mathf.RoundToInt(obj.transform.position.y);
+
+        // 上
+        if (roundY < height - 1)
+        {
+            if (grid[roundX, roundY - 1])
+            {
+                if (grid[roundX, roundY - 1].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
+                {
+                    var upobj = new GameObject("LineObject");
+                    upobj.transform.parent = obj.transform;
+                    var lineRenderer = upobj.AddComponent<LineRenderer>();
+                    var positions = new Vector3[] {
+                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
+                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
+                    };
+                    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                    lineRenderer.startColor = Color.yellow;
+                    lineRenderer.endColor = Color.yellow;
+                    lineRenderer.startWidth = 0.1f;
+                    lineRenderer.endWidth = 0.1f;
+                    lineRenderer.SetPositions(positions);
+
+                }
+            } else {
+                       var upobj = new GameObject("LineObject");
+                    upobj.transform.parent = obj.transform;
+                    var lineRenderer = upobj.AddComponent<LineRenderer>();
+                    var positions = new Vector3[] {
+                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
+                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
+                    };
+                    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                    lineRenderer.startColor = Color.yellow;
+                    lineRenderer.endColor = Color.yellow;
+                    lineRenderer.startWidth = 0.1f;
+                    lineRenderer.endWidth = 0.1f;
+                    lineRenderer.SetPositions(positions);
+             
+            }
+
+        }
+        return;
+        // 上
+        var downobj = new GameObject("LineObject2");
+        downobj.transform.parent = obj.transform;
+        var downlineRenderer = downobj.AddComponent<LineRenderer>();
+        var downpositions = new Vector3[] {
+                    // 左
+                    new Vector3(roundX + lineOffset ,roundY - lineOffset, 0),
+                    new Vector3(roundX - lineOffset ,roundY - lineOffset, 0),
+                };
+        downlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        downlineRenderer.startColor = Color.yellow;
+        downlineRenderer.endColor = Color.yellow;
+        downlineRenderer.startWidth = 0.1f;
+        downlineRenderer.endWidth = 0.1f;
+        downlineRenderer.SetPositions(downpositions);
+
+
+    }
+
     void AddToGrid()
     {
 
@@ -132,37 +205,8 @@ public class Mino : MonoBehaviour
         {
             int roundX = Mathf.RoundToInt(children.transform.position.x);
             int roundY = Mathf.RoundToInt(children.transform.position.y);
-
             grid[roundX, roundY] = children;
-
-            Destroy(children.GetComponent<LineRenderer>());
-            if (!children.GetComponent<LineRenderer>())
-            {
-                // LineRendererなし
-                var lineRenderer = children.gameObject.AddComponent<LineRenderer>();
-                // position 早見表(Prefabの7,1,0の場合)
-                // 左: 6.5,0.5,0 / 6.5,1.5,0 → -0.5, -0.5, 0 / -0.5, +0.5, 0
-                // 上: 6.5,1.5,0 / 7.5,1.5,0 → -0.5, +0.5, 0 / +0.5, +0.5, 0
-                // 右: 7.5,1.5,0 / 7.5,0.5,0 → +0.5, +0.5, 0 / +0.5, -0.5, 0
-                // 下: 7.5,0.5,0 / 6.5,0.5,0 → +0.5, -0.5, 0 / -0.5, -0.5, 0
-                var positions = new Vector3[] {
-                    // 左
-                    new Vector3(roundX - lineOffset ,roundY - lineOffset, 0),
-                    new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
-                };
-                lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-                lineRenderer.startColor = Color.white;
-                lineRenderer.endColor = Color.white;
-                lineRenderer.startWidth = 0.1f;
-                lineRenderer.endWidth = 0.1f;
-                lineRenderer.SetPositions(positions);
-
-                Debug.Log(children.transform.position.x);
-                Debug.Log(children.transform.position.y);
-                Debug.Log(children.transform.position.z);
-            }
-            //         Debug.Log(children.GetComponent<SpriteRenderer>().sprite);
-
+            DrawLine(children.gameObject);
         }
 
     }
@@ -177,7 +221,7 @@ public class Mino : MonoBehaviour
             int roundY = Mathf.RoundToInt(children.transform.position.y);
 
             // minoがステージよりはみ出さないように制御
-            if (roundX < 0 || roundX >= width || roundY < 0 || roundY >= height)
+            if (roundX < 0 || roundX >= width || roundY < 3 || roundY >= height)
             {
                 return false;
             }
