@@ -19,7 +19,7 @@ public class Mino : MonoBehaviour
     private static Transform[,] grid = new Transform[width, height];
 
     // lineRendererのオフセット
-    private static float lineOffset = 0.5f;
+    private static float lineOffset = 0.50f;
 
     void Update()
     {
@@ -125,15 +125,79 @@ public class Mino : MonoBehaviour
         }
     }
 
+    void DrawLineSub(LineRenderer lnobj, Vector3[] vect)
+    {
+        lnobj.material = new Material(Shader.Find("Sprites/Default"));
+        lnobj.startColor = Color.white;
+        lnobj.endColor = Color.white;
+        lnobj.startWidth = 0.15f;
+        lnobj.endWidth = 0.15f;
+        lnobj.SetPositions(vect);
+        return;
+
+    }
+
+    private void DrawLineTop(GameObject obj)
+    {
+        int roundX = Mathf.RoundToInt(obj.transform.position.x);
+        int roundY = Mathf.RoundToInt(obj.transform.position.y);
+
+        var newobj = new GameObject("LineObjectTop");
+        newobj.transform.parent = obj.transform;
+        var lineRendererTop = newobj.AddComponent<LineRenderer>();
+        var positions = new Vector3[] {
+                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
+                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
+                    };
+        DrawLineSub(lineRendererTop, positions);
+    }
+
+    private void DrawLineBottom(GameObject obj)
+    {
+        int roundX = Mathf.RoundToInt(obj.transform.position.x);
+        int roundY = Mathf.RoundToInt(obj.transform.position.y);
+
+        var newobj = new GameObject("LineObjectBottom");
+        newobj.transform.parent = obj.transform;
+        var lineRendererTop = newobj.AddComponent<LineRenderer>();
+        var positions = new Vector3[] {
+                        new Vector3(roundX - lineOffset ,roundY - lineOffset, 0),
+                        new Vector3(roundX + lineOffset ,roundY - lineOffset, 0),
+                    };
+        DrawLineSub(lineRendererTop, positions);
+    }
+
+    private void DrawLineLeft(GameObject obj)
+    {
+        int roundX = Mathf.RoundToInt(obj.transform.position.x);
+        int roundY = Mathf.RoundToInt(obj.transform.position.y);
+
+        var newobj = new GameObject("LineObjectLeft");
+        newobj.transform.parent = obj.transform;
+        var lineRendererTop = newobj.AddComponent<LineRenderer>();
+        var positions = new Vector3[] {
+                        new Vector3(roundX - lineOffset ,roundY - lineOffset, 0),
+                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
+                    };
+        DrawLineSub(lineRendererTop, positions);
+    }
+    private void DrawLineRight(GameObject obj)
+    {
+        int roundX = Mathf.RoundToInt(obj.transform.position.x);
+        int roundY = Mathf.RoundToInt(obj.transform.position.y);
+
+        var newobj = new GameObject("LineObjectLeft");
+        newobj.transform.parent = obj.transform;
+        var lineRendererTop = newobj.AddComponent<LineRenderer>();
+        var positions = new Vector3[] {
+                        new Vector3(roundX + lineOffset ,roundY - lineOffset, 0),
+                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
+                    };
+        DrawLineSub(lineRendererTop, positions);
+    }
+
     void DrawLine(GameObject obj)
     {
-        // 一旦LineRednererのある子オブジェクトを全て削除
-        var childObjs = obj.GetComponentsInChildren<LineRenderer>();
-        foreach (var item in childObjs)
-        {
-            Destroy(item.gameObject);
-        }
-
         // ブロック(単品の座標)
         int roundX = Mathf.RoundToInt(obj.transform.position.x);
         int roundY = Mathf.RoundToInt(obj.transform.position.y);
@@ -141,59 +205,69 @@ public class Mino : MonoBehaviour
         // 上
         if (roundY < height - 1)
         {
+            if (grid[roundX, roundY + 1])
+            {
+                if (grid[roundX, roundY + 1].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
+                {
+                    DrawLineTop(obj);
+                } else {
+                    Transform transobj = obj.transform.Find("LineObjectTop");
+                    if (transobj) {
+                        Debug.Log("あった");
+                        Destroy(transobj.gameObject);
+                    }
+                }
+            }
+            else
+            {
+                DrawLineTop(obj);
+            }
+        }
+        // 下
+        if (roundY > 0)
+        {
             if (grid[roundX, roundY - 1])
             {
                 if (grid[roundX, roundY - 1].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
                 {
-                    var upobj = new GameObject("LineObject");
-                    upobj.transform.parent = obj.transform;
-                    var lineRenderer = upobj.AddComponent<LineRenderer>();
-                    var positions = new Vector3[] {
-                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
-                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
-                    };
-                    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-                    lineRenderer.startColor = Color.yellow;
-                    lineRenderer.endColor = Color.yellow;
-                    lineRenderer.startWidth = 0.1f;
-                    lineRenderer.endWidth = 0.1f;
-                    lineRenderer.SetPositions(positions);
-
+                    DrawLineBottom(obj);
                 }
-            } else {
-                       var upobj = new GameObject("LineObject");
-                    upobj.transform.parent = obj.transform;
-                    var lineRenderer = upobj.AddComponent<LineRenderer>();
-                    var positions = new Vector3[] {
-                        new Vector3(roundX - lineOffset ,roundY + lineOffset, 0),
-                        new Vector3(roundX + lineOffset ,roundY + lineOffset, 0),
-                    };
-                    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-                    lineRenderer.startColor = Color.yellow;
-                    lineRenderer.endColor = Color.yellow;
-                    lineRenderer.startWidth = 0.1f;
-                    lineRenderer.endWidth = 0.1f;
-                    lineRenderer.SetPositions(positions);
-             
             }
-
+            else
+            {
+                DrawLineBottom(obj);
+            }
         }
-        return;
-        // 上
-        var downobj = new GameObject("LineObject2");
-        downobj.transform.parent = obj.transform;
-        var downlineRenderer = downobj.AddComponent<LineRenderer>();
-        var downpositions = new Vector3[] {
-                    // 左
-                    new Vector3(roundX + lineOffset ,roundY - lineOffset, 0),
-                    new Vector3(roundX - lineOffset ,roundY - lineOffset, 0),
-                };
-        downlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        downlineRenderer.startColor = Color.yellow;
-        downlineRenderer.endColor = Color.yellow;
-        downlineRenderer.startWidth = 0.1f;
-        downlineRenderer.endWidth = 0.1f;
-        downlineRenderer.SetPositions(downpositions);
+        // 右
+        if (roundX < width - 1)
+        {
+            if (grid[roundX + 1, roundY])
+            {
+                if (grid[roundX + 1, roundY].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
+                {
+                    DrawLineRight(obj);
+                }
+            }
+            else
+            {
+                DrawLineRight(obj);
+            }
+        }
+                // 左
+        if (roundX > 0)
+        {
+            if (grid[roundX - 1, roundY])
+            {
+                if (grid[roundX - 1, roundY].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
+                {
+                    DrawLineLeft(obj);
+                }
+            }
+            else
+            {
+                DrawLineLeft(obj);
+            }
+        }
 
 
     }
@@ -206,9 +280,12 @@ public class Mino : MonoBehaviour
             int roundX = Mathf.RoundToInt(children.transform.position.x);
             int roundY = Mathf.RoundToInt(children.transform.position.y);
             grid[roundX, roundY] = children;
+        }
+        foreach (Transform children in transform)
+        {
             DrawLine(children.gameObject);
         }
-
+        DumpGrid();
     }
 
     // minoの移動範囲の制御
@@ -221,7 +298,7 @@ public class Mino : MonoBehaviour
             int roundY = Mathf.RoundToInt(children.transform.position.y);
 
             // minoがステージよりはみ出さないように制御
-            if (roundX < 0 || roundX >= width || roundY < 3 || roundY >= height)
+            if (roundX < 0 || roundX >= width || roundY < 1 || roundY >= height)
             {
                 return false;
             }
@@ -233,5 +310,24 @@ public class Mino : MonoBehaviour
 
         }
         return true;
+    }
+    private void DumpGrid()
+    {
+        for (int i = height - 1; i >= 0; i--)
+        {
+            string msg = "";
+            for (int j = 0; j < width; j++)
+            {
+                if (grid[j, i] != null)
+                {
+                    msg += "□　";
+                }
+                else
+                {
+                    msg += "　　";
+                }
+            }
+            Debug.Log(msg);
+        }
     }
 }
