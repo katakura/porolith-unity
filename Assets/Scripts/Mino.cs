@@ -186,7 +186,7 @@ public class Mino : MonoBehaviour
         int roundX = Mathf.RoundToInt(obj.transform.position.x);
         int roundY = Mathf.RoundToInt(obj.transform.position.y);
 
-        var newobj = new GameObject("LineObjectLeft");
+        var newobj = new GameObject("LineObjectRight");
         newobj.transform.parent = obj.transform;
         var lineRendererTop = newobj.AddComponent<LineRenderer>();
         var positions = new Vector3[] {
@@ -209,18 +209,29 @@ public class Mino : MonoBehaviour
             {
                 if (grid[roundX, roundY + 1].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
                 {
-                    DrawLineTop(obj);
-                } else {
-                    Transform transobj = obj.transform.Find("LineObjectTop");
-                    if (transobj) {
-                        Debug.Log("あった");
-                        Destroy(transobj.gameObject);
+                    Transform childGameObject = obj.transform.Find("LineObjectTop");
+                    if (!childGameObject)
+                    {
+                        DrawLineTop(obj);
+                    }
+                }
+                else
+                {
+                    Transform childGameObject = obj.transform.Find("LineObjectTop");
+                    if (childGameObject)
+                    {
+                        Destroy(childGameObject.gameObject);
+
                     }
                 }
             }
             else
             {
-                DrawLineTop(obj);
+                Transform childGameObject = obj.transform.Find("LineObjectTop");
+                if (!childGameObject)
+                {
+                    DrawLineTop(obj);
+                }
             }
         }
         // 下
@@ -230,12 +241,29 @@ public class Mino : MonoBehaviour
             {
                 if (grid[roundX, roundY - 1].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
                 {
-                    DrawLineBottom(obj);
+                    Transform childGameObject = obj.transform.Find("LineObjectBottom");
+                    if (!childGameObject)
+                    {
+                        DrawLineBottom(obj);
+                    }
+                }
+                else
+                {
+                    Transform childGameObject = obj.transform.Find("LineObjectBottom");
+                    if (childGameObject)
+                    {
+                        Destroy(childGameObject.gameObject);
+
+                    }
                 }
             }
             else
             {
-                DrawLineBottom(obj);
+                Transform childGameObject = obj.transform.Find("LineObjectBottom");
+                if (!childGameObject)
+                {
+                    DrawLineBottom(obj);
+                }
             }
         }
         // 右
@@ -245,27 +273,61 @@ public class Mino : MonoBehaviour
             {
                 if (grid[roundX + 1, roundY].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
                 {
-                    DrawLineRight(obj);
+                    Transform childGameObject = obj.transform.Find("LineObjectRight");
+                    if (!childGameObject)
+                    {
+                        DrawLineRight(obj);
+                    }
+                }
+                else
+                {
+                    Transform childGameObject = obj.transform.Find("LineObjectRight");
+                    if (childGameObject)
+                    {
+                        Destroy(childGameObject.gameObject);
+
+                    }
                 }
             }
             else
             {
-                DrawLineRight(obj);
+                Transform childGameObject = obj.transform.Find("LineObjectRight");
+                if (!childGameObject)
+                {
+                    DrawLineRight(obj);
+                }
             }
         }
-                // 左
+        // 左
         if (roundX > 0)
         {
             if (grid[roundX - 1, roundY])
             {
                 if (grid[roundX - 1, roundY].GetComponent<SpriteRenderer>().sprite != obj.GetComponent<SpriteRenderer>().sprite)
                 {
-                    DrawLineLeft(obj);
+                    Transform childGameObject = obj.transform.Find("LineObjectLeft");
+                    if (!childGameObject)
+                    {
+                        DrawLineLeft(obj);
+                    }
+                }
+                else
+                {
+                    Transform childGameObject = obj.transform.Find("LineObjectLeft");
+                    if (childGameObject)
+                    {
+                        Destroy(childGameObject.gameObject);
+
+                    }
                 }
             }
             else
             {
-                DrawLineLeft(obj);
+                Transform childGameObject = obj.transform.Find("LineObjectLeft");
+                if (!childGameObject)
+                {
+                    DrawLineLeft(obj);
+                }
             }
         }
 
@@ -281,9 +343,15 @@ public class Mino : MonoBehaviour
             int roundY = Mathf.RoundToInt(children.transform.position.y);
             grid[roundX, roundY] = children;
         }
-        foreach (Transform children in transform)
+        for (int i = height - 1; i >= 0; i--)
         {
-            DrawLine(children.gameObject);
+            for (int j = 0; j < width; j++)
+            {
+                if (grid[j, i])
+                {
+                    DrawLine(grid[j, i].gameObject);
+                }
+            }
         }
         DumpGrid();
     }
@@ -298,7 +366,7 @@ public class Mino : MonoBehaviour
             int roundY = Mathf.RoundToInt(children.transform.position.y);
 
             // minoがステージよりはみ出さないように制御
-            if (roundX < 0 || roundX >= width || roundY < 1 || roundY >= height)
+            if (roundX < 0 || roundX >= width || roundY < 0 || roundY >= height)
             {
                 return false;
             }
@@ -327,7 +395,7 @@ public class Mino : MonoBehaviour
                     msg += "　　";
                 }
             }
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
     }
 }
